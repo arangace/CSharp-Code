@@ -5,7 +5,7 @@ namespace unleashed
 {
     class Program
     {
-        static void convert(string input, int currentUnit)
+        static void convert(string input)
         {
             var integers = new Dictionary<string, string>(){
                 {"00","zero"},
@@ -43,22 +43,17 @@ namespace unleashed
             //checks against the dictionary for relative name
             //Checks if the value is within 0 to 19
             Console.WriteLine(input);
+            Console.WriteLine(input.Substring(0, 1));
             if (integers.ContainsKey(input))
             {
                 Console.WriteLine(integers[input]);
-                Console.WriteLine(currentUnit);
             }
-            else if (largeIntegers.ContainsKey(input))
+            //else check if its value from 20 to 99
+            else if (largeIntegers.ContainsKey(input.Substring(0, 1)))
             {
-                Console.WriteLine(largeIntegers[input]);
-                Console.WriteLine(currentUnit);
+                Console.WriteLine("i hit it");
+                Console.WriteLine(largeIntegers[input.Substring(0, 1)]);
             }
-            // else if (largeIntegers.ContainsKey(input.Substring(0, 1)))
-            // {
-            //     Console.WriteLine("i hit it");
-            //     Console.WriteLine(largeIntegers[input]);
-            //     Console.WriteLine(currentUnit);
-            // }
             // Console.WriteLine(integers[number[i]]);
         }
         static void Main(string[] args)
@@ -68,6 +63,20 @@ namespace unleashed
             Console.WriteLine("Your inputted number is " + input);
             try
             {
+                //divide and separate units
+                //if input number is between 0-9
+                Console.WriteLine(input.Length);
+                if (input.Length == 1)
+                {
+                    convert("0" + input);
+                }
+                else
+                {
+                    //else if the value is two digits but between 0 and 19
+                    Console.WriteLine("substring" + input.Substring(input.Length - 2));
+                    //Console.WriteLine("numbers is" + (input.Substring(input.Length - 1, input.Length - 2) + input.Substring(input.Length, input.Length - 1)));
+                    convert(input.Substring(input.Length - 2));
+                }
 
                 for (int i = input.Length; i-- > 0;)
                 {
@@ -77,8 +86,7 @@ namespace unleashed
                     if (i == input.Length - 1)
                     {
 
-                        Console.WriteLine("numbers is" + (input.Substring(i - 1, i - 1) + input.Substring(i, i - 1)));
-                        convert((input.Substring(i - 1, i - 1) + input.Substring(i, i - 1)), i);
+
 
                     }
                     else
