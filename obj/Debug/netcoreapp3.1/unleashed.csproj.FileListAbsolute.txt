@@ -1,0 +1,13 @@
+C:\Users\k\Desktop\University Work\C#projects\unleashed\bin\Debug\netcoreapp3.1\unleashed.exe
+C:\Users\k\Desktop\University Work\C#projects\unleashed\bin\Debug\netcoreapp3.1\unleashed.deps.json
+C:\Users\k\Desktop\University Work\C#projects\unleashed\bin\Debug\netcoreapp3.1\unleashed.runtimeconfig.json
+C:\Users\k\Desktop\University Work\C#projects\unleashed\bin\Debug\netcoreapp3.1\unleashed.runtimeconfig.dev.json
+C:\Users\k\Desktop\University Work\C#projects\unleashed\bin\Debug\netcoreapp3.1\unleashed.dll
+C:\Users\k\Desktop\University Work\C#projects\unleashed\bin\Debug\netcoreapp3.1\unleashed.pdb
+C:\Users\k\Desktop\University Work\C#projects\unleashed\obj\Debug\netcoreapp3.1\unleashed.csprojAssemblyReference.cache
+C:\Users\k\Desktop\University Work\C#projects\unleashed\obj\Debug\netcoreapp3.1\unleashed.AssemblyInfoInputs.cache
+C:\Users\k\Desktop\University Work\C#projects\unleashed\obj\Debug\netcoreapp3.1\unleashed.AssemblyInfo.cs
+C:\Users\k\Desktop\University Work\C#projects\unleashed\obj\Debug\netcoreapp3.1\unleashed.csproj.CoreCompileInputs.cache
+C:\Users\k\Desktop\University Work\C#projects\unleashed\obj\Debug\netcoreapp3.1\unleashed.dll
+C:\Users\k\Desktop\University Work\C#projects\unleashed\obj\Debug\netcoreapp3.1\unleashed.pdb
+C:\Users\k\Desktop\University Work\C#projects\unleashed\obj\Debug\netcoreapp3.1\unleashed.genruntimeconfig.cache
