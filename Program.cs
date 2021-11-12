@@ -39,6 +39,7 @@ namespace unleashed
                 {"8","eighty"},
                 {"9","ninety"},
                 };
+            string[] digitUnits = { "Hundred", "Thousand", "Million" };
             //numbers onwards sort
             //checks against the dictionary for relative name
             //Checks if the value is within 0 to 19
@@ -52,6 +53,11 @@ namespace unleashed
             else if (largeIntegers.ContainsKey(input.Substring(0, 1)))
             {
                 Console.WriteLine(largeIntegers[input.Substring(0, 1)]);
+                Console.WriteLine(integers[input.Substring(1)]);
+                // if (largeIntegers.ContainsKey(input.Substring(1)))
+                // {
+
+                // }
             }
             // Console.WriteLine(integers[number[i]]);
         }
