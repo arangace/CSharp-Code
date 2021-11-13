@@ -47,34 +47,46 @@ namespace currency
                 {"80","eighty "},
                 {"90","ninety "},
     };
+        private static string convertTwoDigits(string input)
+        {
+            //if value is between 0-9
+            string convertedAmount = "";
+            if (input.Substring(0, 1) == "0")
+            {
+                convertedAmount = integers[input.Substring(1)];
+            }
+
+            else
+            {
+                //if value between 10-19 or between 20-99
+                convertedAmount = input.Substring(0, 1) == "1" ? integers[input] : midIntegers[input.Substring(0, 1) + "0"] + integers[input.Substring(1)];
+
+            }
+            return convertedAmount;
+        }
         private static string convertDollars(string input)
         {
             //function takes in three numbers at a time
+            //converts the first digit i.e 123 converts 1
+            string dollars = "";
+            string dollarsNum = input.Substring(0, input.Length - 2);
+            Console.WriteLine(dollarsNum);
+            for (int i = dollarsNum.Length; i >= 2; i -= 2)
+            {
+                if (i / 3 != 0)
+                {
 
-            //numbers onwards sort
-            //Checks if the value is within 0 to 19
-            Console.WriteLine(input);
-            Console.WriteLine(input.Substring(0, 1));
-            if (integers.ContainsKey(input))
-            {
-                Console.WriteLine(integers[input]);
-                return integers[input];
-            }
-            //else check if its value from 20 to 99
-            else if (midIntegers.ContainsKey(input.Substring(0, 1)))
-            {
-                Console.WriteLine(midIntegers[input.Substring(0, 1)]);
-                Console.WriteLine(integers[input.Substring(1)]);
-                return (midIntegers[input.Substring(0, 1)] + integers[input.Substring(1)]);
-                // if (largeIntegers.ContainsKey(input.Substring(1)))
-                // {
+                }
+                //passes the rest of the number minus the cents
+                Console.WriteLine("parsing afterwards" + dollarsNum[i]);
+                //convertDollars(input.Substring(0, input.Length - 2));
 
-                // }
             }
-            else
-            {
-                return "-1";
-            }
+            // Console.WriteLine("dollars converting.." + input);
+            // Console.WriteLine(input);
+
+            //dollars = integers[input.Substring(0, 1)] + convertTwoDigits(input.Substring(1));
+            return dollars;
         }
         private static string convertCents(string input)
         {
@@ -83,37 +95,17 @@ namespace currency
             //Checks if the value is within 0 to 19
             Console.WriteLine("cents converting.." + input);
             Console.WriteLine(input.Substring(0, 1));
-            //if value is between 0-9
-            if (input.Substring(0, 1) == "0")
-            {
-                cents = integers[input.Substring(1)];
-            }
-
-            else
-            {
-                //if value between 10-19
-                if (input.Substring(0, 1) == "1")
-                {
-                    cents = integers[input];
-                }
-                //else check if its value from 20 to 99
-                else
-                {
-                    cents = (midIntegers[input.Substring(0, 1) + "0"] + integers[input.Substring(1)]);
-                }
-
-            }
-            Console.WriteLine(cents);
+            cents = convertTwoDigits(input);
             return cents;
+
         }
         public static string parseInputToString(string input)
         {
             try
             {
+                //assumes input is valid and cents will be 2dp if present.
                 words.wordNumbers outputString = new words.wordNumbers();
 
-                // outputString.concatString = "asd";
-                // Console.WriteLine(outputString.concatString);
                 //divide and separate units
                 //if input number is between 0-9
                 Console.WriteLine(input.IndexOf("."));
@@ -121,6 +113,19 @@ namespace currency
                 //check if number is a decimal
                 if (input.IndexOf(".") == -1)//if there is no decimal pointer
                 {
+                    Console.WriteLine("no dec");
+                    //getting dollars value
+                    //if value is single digit
+                    //if value has two digits
+                    //if value is greater
+                    for (int i = input.Length - 2; i - 2 > 0;)
+                    {
+                        //parsing the rest of the numbers
+                        //input.length identifies the highest numerical unit
+
+                        Console.WriteLine("parsing dollars.." + input[i]);
+                        //convertDollars(input);
+                    }
                     // if (input.Length == 1)
                     // {
 
@@ -146,19 +151,23 @@ namespace currency
                 {
                     //split number at decimal, parse both
                     Console.WriteLine("decimal entered..");
-                    Console.WriteLine(input.Substring(0, input.IndexOf(".")));
-                    Console.WriteLine(input.Substring(input.IndexOf(".")));
+
+                    //parsing inputted decimal number
+                    //remove the decimal point
+                    Console.WriteLine(input.IndexOf("."));
+                    Console.WriteLine(input.Length);
+                    //if the inputted cents is not 2dp then we add a 0 i.e. 20.3 becomes 20.30
+                    if (input.IndexOf(".") == input.Length - 2)
+                    {
+                        input = input + "0";
+                    }
+                    input = input.Replace(".", "");
                     //getting cents value
+                    Console.WriteLine(input);
                     outputString.concatString = "and " + convertCents(input.Substring(input.Length - 2)) + "cents";
                     Console.WriteLine(outputString.concatString);
-                    //getting dollars value
-                    for (int i = input.Length - 2; i-- > 0;)
-                    {
-                        //parsing the rest of the numbers
-                        //input.length identifies the highest numerical unit
-
-                        Console.WriteLine("parsing afterwards" + input[i]);
-                    }
+                    //getting dolalrs value
+                    convertDollars(input);
                 }
 
 

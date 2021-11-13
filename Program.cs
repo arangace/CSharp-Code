@@ -7,7 +7,6 @@ public class Program
         Console.WriteLine("Input number to convert: ");
         string input = Console.ReadLine();
         Console.WriteLine("Your inputted number is " + input);
-
         currency.convertToString.parseInputToString(input);
     }
 
