@@ -4,7 +4,7 @@ namespace currency
 {
     public static class convertToString
     {
-        private static string[] digitUnits = { "Hundred ", "Thousand ", "Million " };
+        private static string[] digitUnits = { "", "thousand ", "million " };
         private static readonly Dictionary<string, string> integers
             = new Dictionary<string, string>{
                 {"0","zero "},
@@ -38,10 +38,9 @@ namespace currency
         };
         private static readonly Dictionary<string, string> midIntegers
          = new Dictionary<string, string>{
-                {"20","twenty "},
-                {"30", "thirty "},
-                {"40","forty "},
-                {"50", "fifty "},
+                {"30", "thousand "},
+                {"40","million "},
+                {"50", "trillion "},
                 {"60","sixty "},
                 {"70","seventy "},
                 {"80","eighty "},
@@ -59,33 +58,82 @@ namespace currency
             else
             {
                 //if value between 10-19 or between 20-99
-                convertedAmount = input.Substring(0, 1) == "1" ? integers[input] : midIntegers[input.Substring(0, 1) + "0"] + integers[input.Substring(1)];
+                convertedAmount = input.Substring(0, 1) == "1" ? integers[input] : integers[input.Substring(0, 1) + "0"] + integers[input.Substring(1)];
 
             }
             return convertedAmount;
+        }
+        private static string convertThreeDigits(string dollars, int unit)
+        {
+            //convert the hundred
+            string hundreds = integers[dollars.Substring(0, 1)];
+            Console.WriteLine(hundreds);
+            //convert the tens
+            string tens = convertTwoDigits(dollars.Substring(1, 2)) + digitUnits[(unit / 3) - 1];
+            //string check
+            if (dollars.Substring(1, 2) == "00")
+            {
+                return hundreds + "hundred ";
+            }
+            else
+            {
+                return hundreds + "hundred and " + tens;
+            }
+
         }
         private static string convertDollars(string input)
         {
             //function takes in three numbers at a time
             //converts the first digit i.e 123 converts 1
             string dollars = "";
+            // int dollarsNum = Int32.Parse(input.Substring(0, input.Length - 2));
             string dollarsNum = input.Substring(0, input.Length - 2);
-            Console.WriteLine(dollarsNum);
-            for (int i = dollarsNum.Length; i >= 2; i -= 2)
+            Console.WriteLine("dollars num" + dollarsNum);
+            int i = 0;
+            int unitLength = dollarsNum.Length;
+            //if number is multiple of 3 digits
+            if (dollarsNum.Length % 3 == 0)
             {
-                if (i / 3 != 0)
+                Console.WriteLine("dollars is divisible by 3");
+                for (i = 0; i < dollarsNum.Length; i += 3)
                 {
 
+                    //runs normally
+                    Console.WriteLine((dollarsNum.Substring(i, 3)));
+                    // Console.WriteLine(dollarsNum[i + 1]);
+                    // Console.WriteLine(dollarsNum[i + 2]);
+
+                    dollars += convertThreeDigits(dollarsNum.Substring(i, 3), unitLength);
+                    unitLength -= 3;
+
                 }
-                //passes the rest of the number minus the cents
-                Console.WriteLine("parsing afterwards" + dollarsNum[i]);
-                //convertDollars(input.Substring(0, input.Length - 2));
-
             }
-            // Console.WriteLine("dollars converting.." + input);
-            // Console.WriteLine(input);
+            else
+            {
+                for (int k = dollarsNum.Length - 1; k > 0; k -= 3)
+                {
+                    if (i < 3)
+                    {
+                        //These are the last few numbers
+                    }
+                    else
+                    {
+                        //runs normally
+                        Console.WriteLine((dollarsNum.Substring(i, 3)));
+                        // Console.WriteLine(dollarsNum[i + 1]);
+                        // Console.WriteLine(dollarsNum[i + 2]);
 
-            //dollars = integers[input.Substring(0, 1)] + convertTwoDigits(input.Substring(1));
+                        dollars += convertThreeDigits(dollarsNum.Substring(i, 3), unitLength);
+                        unitLength -= 3;
+                        //Use your functions, this is just what it would look like
+                        string value = dollarsNum[i - 2] + "Hundred" + dollarsNum[i - 1] + dollarsNum[i];
+
+                        //put this into a "final value" string somewhere, and prepend to value. eg
+                        string finalValue = "";
+                        finalValue = finalValue + value;
+                    }
+                }
+            }
             return dollars;
         }
         private static string convertCents(string input)
@@ -162,12 +210,14 @@ namespace currency
                         input = input + "0";
                     }
                     input = input.Replace(".", "");
-                    //getting cents value
-                    Console.WriteLine(input);
-                    outputString.concatString = "and " + convertCents(input.Substring(input.Length - 2)) + "cents";
-                    Console.WriteLine(outputString.concatString);
                     //getting dolalrs value
-                    convertDollars(input);
+                    string dollar = convertDollars(input) + "dollars ";
+                    //getting cents value
+                    string cents = "and " + convertCents(input.Substring(input.Length - 2)) + "cents";
+                    outputString.concatString = dollar + cents;
+                    Console.WriteLine(input);
+                    Console.WriteLine(outputString.concatString);
+
                 }
 
 
