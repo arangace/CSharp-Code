@@ -8,6 +8,7 @@ public class Program
         string input = Console.ReadLine();
         Console.WriteLine("Your inputted number is " + input);
         currency.convertToString.parseInputToString(input);
+
     }
 
 }

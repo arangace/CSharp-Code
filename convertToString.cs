@@ -4,10 +4,10 @@ namespace currency
 {
     public static class convertToString
     {
-        private static string[] digitUnits = { "", "thousand ", "million " };
+        private static string[] digitUnits = { "", "thousand ", "million ", "billion ", "trillion ", "quadrillion " };
         private static readonly Dictionary<string, string> integers
             = new Dictionary<string, string>{
-                {"0","zero "},
+                {"0",""},
                 {"1", "one "},
                 {"2","two "},
                 {"3", "three "},
@@ -55,8 +55,6 @@ namespace currency
         }
         private static string convertThreeDigits(string dollars, int unit, bool added)
         {
-            Console.WriteLine("converitng three digits dollars");
-            Console.WriteLine(dollars);
             string hundreds = "";
             if (added == false)
             {
@@ -66,12 +64,12 @@ namespace currency
                 Console.WriteLine(hundreds);
             }
             //convert the tens
-            else
-            {
-
-            }
             string tens = convertTwoDigits(dollars.Substring(1, 2)) + digitUnits[(unit / 3) - 1];
             //string check
+            if (dollars == "000")
+            {
+                return "";
+            }
             if (added == true)
             {
                 return tens;
@@ -144,9 +142,8 @@ namespace currency
             {
                 input = input + "0";
             }
-            Console.WriteLine(input);
             input = input.Replace(".", "");
-            //getting dolalrs value
+            //getting dollars value
             string dollar = convertDollars(input.Substring(0, input.Length - 2)) + "dollars ";
             //getting cents value
             string cents = "and " + convertCents(input.Substring(input.Length - 2)) + "cents";
@@ -167,14 +164,25 @@ namespace currency
         {
             try
             {
-                //assumes input is valid and cents will be 2dp if present.
+                //assumes input is valid and cents will be 1-2dp if present.
                 words.wordNumbers outputString = new words.wordNumbers();
+                int hasZeros = Int32.Parse(input.Replace(".", ""));
 
+                if (hasZeros == 0)
+                {
+                    Console.WriteLine("null input" + hasZeros);
+                    return "-1";
+                }
+                else if (input.Length - input.IndexOf(".") > 3)
+                {
+                    Console.WriteLine("incorrect cents input");
+                    return "-1";
+                }
                 //divide and separate units
                 //if input number is between 0-9
-                Console.WriteLine(input.IndexOf("."));
                 string result = "No result";
                 //check if number is a decimal
+
                 if (input.IndexOf(".") == -1)//if there is no decimal pointer
                 {
                     Console.WriteLine("no dec");
@@ -196,10 +204,6 @@ namespace currency
 
 
             }
-            // catch (IOException e)
-            // {
-            //     Console.WriteLine(e);
-            // }
             catch (FormatException e)
             {
                 Console.WriteLine(e);
