@@ -63,16 +63,32 @@ namespace currency
             }
             return convertedAmount;
         }
-        private static string convertThreeDigits(string dollars, int unit)
+        private static string convertThreeDigits(string dollars, int unit, bool added)
         {
-            //convert the hundred
-            string hundreds = integers[dollars.Substring(0, 1)];
-            Console.WriteLine(hundreds);
+            Console.WriteLine("converitng three digits dollars");
+            Console.WriteLine(dollars);
+            string hundreds = "";
+            if (added == false)
+            {
+                Console.WriteLine(added);
+                //convert the hundred
+                hundreds = integers[dollars.Substring(0, 1)];
+                Console.WriteLine(hundreds);
+            }
             //convert the tens
+            else
+            {
+
+            }
             string tens = convertTwoDigits(dollars.Substring(1, 2)) + digitUnits[(unit / 3) - 1];
             //string check
+            if (added == true)
+            {
+                return tens;
+            }
             if (dollars.Substring(1, 2) == "00")
             {
+
                 return hundreds + "hundred ";
             }
             else
@@ -86,54 +102,67 @@ namespace currency
             //function takes in three numbers at a time
             //converts the first digit i.e 123 converts 1
             string dollars = "";
-            // int dollarsNum = Int32.Parse(input.Substring(0, input.Length - 2));
             string dollarsNum = input.Substring(0, input.Length - 2);
-            Console.WriteLine("dollars num" + dollarsNum);
             int i = 0;
-            int unitLength = dollarsNum.Length;
+            bool added = false;
+            int unitLength = 0;
             //if number is multiple of 3 digits
-            if (dollarsNum.Length % 3 == 0)
+            if ((3 - dollarsNum.Length % 3) == 1)
             {
-                Console.WriteLine("dollars is divisible by 3");
-                for (i = 0; i < dollarsNum.Length; i += 3)
-                {
-
-                    //runs normally
-                    Console.WriteLine((dollarsNum.Substring(i, 3)));
-                    // Console.WriteLine(dollarsNum[i + 1]);
-                    // Console.WriteLine(dollarsNum[i + 2]);
-
-                    dollars += convertThreeDigits(dollarsNum.Substring(i, 3), unitLength);
-                    unitLength -= 3;
-
-                }
+                dollarsNum = "0" + dollarsNum;
+                added = true;
             }
-            else
+            else if ((3 - dollarsNum.Length % 3) == 2)
             {
-                for (int k = dollarsNum.Length - 1; k > 0; k -= 3)
-                {
-                    if (i < 3)
-                    {
-                        //These are the last few numbers
-                    }
-                    else
-                    {
-                        //runs normally
-                        Console.WriteLine((dollarsNum.Substring(i, 3)));
-                        // Console.WriteLine(dollarsNum[i + 1]);
-                        // Console.WriteLine(dollarsNum[i + 2]);
-
-                        dollars += convertThreeDigits(dollarsNum.Substring(i, 3), unitLength);
-                        unitLength -= 3;
-                        //Use your functions, this is just what it would look like
-                        string value = dollarsNum[i - 2] + "Hundred" + dollarsNum[i - 1] + dollarsNum[i];
-
-                        //put this into a "final value" string somewhere, and prepend to value. eg
-                        string finalValue = "";
-                        finalValue = finalValue + value;
-                    }
-                }
+                dollarsNum = "00" + dollarsNum;
+                added = true;
             }
+            unitLength = dollarsNum.Length;
+            for (i = 0; i < dollarsNum.Length; i += 3)
+            {
+
+                //runs normally
+
+                dollars += convertThreeDigits(dollarsNum.Substring(i, 3), unitLength, added);
+                Console.WriteLine("current dollars" + dollars);
+                added = false;
+                unitLength -= 3;
+
+            }
+
+            // else
+            // {
+            //     string dollarsPartOne = "";
+            //     for (int k = dollarsNum.Length; k > 0; k -= 3)
+            //     {
+            //         if (k < 3)
+            //         {
+            //             Console.WriteLine("dollars is not divisible by 3");
+
+            //             dollarsPartOne = convertTwoDigits(dollarsNum.Substring(0, 2)) + digitUnits[dollarsNum.Length / 3] + dollarsPartOne;
+            //             Console.WriteLine(dollarsPartOne);
+            //             //These are the last few numbers
+            //         }
+            //         else
+            //         {
+            //             Console.WriteLine("else");
+            //             //runs normally
+            //             Console.WriteLine((dollarsNum.Substring(k - 3, 3)));
+            //             // Console.WriteLine(dollarsNum[i + 1]);
+            //             // Console.WriteLine(dollarsNum[i + 2]);
+
+            //             // dollars += convertThreeDigits(dollarsNum.Substring(k - 3, 3), unitLength);
+            //             // unitLength -= 3;
+
+            //             //Use your functions, this is just what it would look like
+            //             // string value = dollarsNum[i - 2] + "Hundred" + dollarsNum[i - 1] + dollarsNum[i];
+
+            //             //put this into a "final value" string somewhere, and prepend to value. eg
+            //             // string finalValue = "";
+            //             // finalValue = finalValue + value;
+            //         }
+            //     }
+            // }
             return dollars;
         }
         private static string convertCents(string input)
@@ -209,13 +238,14 @@ namespace currency
                     {
                         input = input + "0";
                     }
+                    Console.WriteLine(input);
                     input = input.Replace(".", "");
                     //getting dolalrs value
                     string dollar = convertDollars(input) + "dollars ";
                     //getting cents value
                     string cents = "and " + convertCents(input.Substring(input.Length - 2)) + "cents";
                     outputString.concatString = dollar + cents;
-                    Console.WriteLine(input);
+
                     Console.WriteLine(outputString.concatString);
 
                 }
