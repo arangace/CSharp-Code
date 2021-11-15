@@ -36,6 +36,56 @@ namespace currency
                 {"80","eighty "},
                 {"90","ninety "},
         };
+        /*
+        **  Takes input string and converts it to the verbal representation.
+        **  Assumes input is valid and cents will be 1-2dp if present.
+        */
+        public static string parseInputToString(string input)
+        {
+            try
+            {
+                words.wordNumbers outputString = new words.wordNumbers();
+                string result = "No result";
+
+                int hasZeros = Int32.Parse(input.Replace(".", ""));
+                if (hasZeros == 0)
+                {
+                    Console.WriteLine("Null input");
+                    return "-1";
+                }
+                else if ((input.IndexOf(".") != -1) && (input.Length - input.IndexOf(".") > 3))
+                {
+                    Console.WriteLine("Incorrect cents input");
+                    return "-1";
+                }
+
+                //check if number is a decimal
+                if (input.IndexOf(".") == -1)
+                {
+                    result = noDecimal(input);
+                    outputString.concatString = result;
+
+                }
+                else
+                {
+                    result = hasDecimal(input);
+                    outputString.concatString = result;
+                }
+                return outputString.concatString;
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine(e);
+                return "-1";
+            }
+            finally
+            {
+                Console.WriteLine("Exiting..");
+            }
+        }
+        /*
+        **  Converts two input digits and returns the verbal value
+        */
         private static string convertTwoDigits(string input)
         {
             //if value is between 0-9
@@ -53,49 +103,42 @@ namespace currency
             }
             return convertedAmount;
         }
+        /*
+        **  Converts three digit input into verbal value
+        **  Takes input of the three digits, the unit identified for the millions etc and whether 0's have been added
+        */
         private static string convertThreeDigits(string dollars, int unit, bool added)
         {
             string hundreds = "";
+            string tens = "";
+            //if zeros have been added to the front of the dollars
             if (added == false)
             {
-                Console.WriteLine(added);
                 //convert the hundred
                 hundreds = integers[dollars.Substring(0, 1)];
-                Console.WriteLine(hundreds);
             }
             //convert the tens
-            string tens = convertTwoDigits(dollars.Substring(1, 2)) + digitUnits[(unit / 3) - 1];
-            //string check
-            if (dollars == "000")
-            {
-                return "";
-            }
-            if (added == true)
-            {
-                return tens;
-            }
-            if (dollars.Substring(1, 2) == "00")
-            {
-
-                return hundreds + "hundred ";
-            }
-            else
-            {
-                return hundreds + "hundred and " + tens;
-            }
-
+            tens = convertTwoDigits(dollars.Substring(1, 2)) + digitUnits[(unit / 3) - 1];
+            //If the inputted string is pure zeros, don't input "hundred"
+            if (dollars == "000") return "";
+            //If zeros have been added, return the tens value which have been calculated above
+            if (added == true) return tens;
+            //Handles whether only the hundreds need to be added or tens needs to as well.
+            return dollars.Substring(1, 2) == "00" ? hundreds + "hundred " : hundreds + "hundred and " + tens;
         }
+
+        /*
+        **  Method for handling converting the dollar part of the number
+        **  Method takes in three numbers at a time
+        */
         private static string convertDollars(string dollarsNum)
         {
-            //function takes in three numbers at a time
-            //converts the first digit i.e 123 converts 1
-
             string dollars = "";
             int i = 0;
             bool added = false;
             int unitLength = 0;
-            Console.WriteLine("dollarsnum.." + dollarsNum);
-            //if number is multiple of 3 digits
+
+            //if number is not multiple of 3 digits, add one or two 0's
             if ((3 - dollarsNum.Length % 3) == 1)
             {
                 dollarsNum = "0" + dollarsNum;
@@ -106,37 +149,26 @@ namespace currency
                 dollarsNum = "00" + dollarsNum;
                 added = true;
             }
+
             unitLength = dollarsNum.Length;
             for (i = 0; i < dollarsNum.Length; i += 3)
             {
-
-                //runs normally
-
                 dollars += convertThreeDigits(dollarsNum.Substring(i, 3), unitLength, added);
-                Console.WriteLine("current dollars" + dollars);
                 added = false;
                 unitLength -= 3;
-
             }
             return dollars;
         }
-        private static string convertCents(string input)
-        {
-            //method takes in two numbers at a time
-            string cents = "";
-            //Checks if the value is within 0 to 19
-            Console.WriteLine("cents converting.." + input);
-            Console.WriteLine(input.Substring(0, 1));
-            cents = convertTwoDigits(input);
-            return cents;
+        /*
+        **  Method for handling converting the cents part of the number
+        **  Method takes in two numbers at a time
+        */
 
-        }
         private static string hasDecimal(string input)
         {
-            //parsing inputted decimal number
             //remove the decimal point
-            Console.WriteLine(input.IndexOf("."));
-            Console.WriteLine(input.Length);
+            string dollar = "";
+            string cents = "";
             //if the inputted cents is not 2dp then we add a 0 i.e. 20.3 becomes 20.30
             if (input.IndexOf(".") == input.Length - 2)
             {
@@ -144,78 +176,22 @@ namespace currency
             }
             input = input.Replace(".", "");
             //getting dollars value
-            string dollar = convertDollars(input.Substring(0, input.Length - 2)) + "dollars ";
+            dollar = convertDollars(input.Substring(0, input.Length - 2)) + "dollars ";
             //getting cents value
-            string cents = "and " + convertCents(input.Substring(input.Length - 2)) + "cents";
-
+            if (input.Substring(input.Length - 2) != "00")
+            {
+                cents = "and " + convertTwoDigits(input.Substring(input.Length - 2)) + "cents";
+            }
             return dollar + cents;
-
         }
+
+        /*
+        **  Method for handling converting the pure dollar part of the number
+        */
         private static string noDecimal(string input)
         {
-
-            //getting dolalrs value
-            string dollar = convertDollars(input) + "dollars ";
-            Console.WriteLine("output dolalrs is" + dollar);
-            return dollar;
-
+            //getting dollars value
+            return convertDollars(input) + "dollars ";
         }
-        public static string parseInputToString(string input)
-        {
-            try
-            {
-                //assumes input is valid and cents will be 1-2dp if present.
-                words.wordNumbers outputString = new words.wordNumbers();
-                int hasZeros = Int32.Parse(input.Replace(".", ""));
-
-                if (hasZeros == 0)
-                {
-                    Console.WriteLine("null input" + hasZeros);
-                    return "-1";
-                }
-                else if (input.Length - input.IndexOf(".") > 3)
-                {
-                    Console.WriteLine("incorrect cents input");
-                    return "-1";
-                }
-                //divide and separate units
-                //if input number is between 0-9
-                string result = "No result";
-                //check if number is a decimal
-
-                if (input.IndexOf(".") == -1)//if there is no decimal pointer
-                {
-                    Console.WriteLine("no dec");
-                    result = noDecimal(input);
-                    outputString.concatString = result;
-
-                }
-                else//if there is a decimal
-                {
-                    //split number at decimal, parse both
-                    Console.WriteLine("decimal entered..");
-                    result = hasDecimal(input);
-                    outputString.concatString = result;
-
-                }
-
-
-                Console.WriteLine(outputString.concatString);
-
-
-            }
-            catch (FormatException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-
-                Console.WriteLine("Exiting..");
-
-            }
-            return "-1";
-        }
-
     }
 }
